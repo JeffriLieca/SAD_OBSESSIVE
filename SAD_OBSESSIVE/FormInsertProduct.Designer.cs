@@ -29,6 +29,7 @@ namespace SAD_OBSESSIVE
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInsertProduct));
             this.pictureBoxAdd = new System.Windows.Forms.PictureBox();
             this.buttonAddImage = new System.Windows.Forms.Button();
@@ -56,9 +57,10 @@ namespace SAD_OBSESSIVE
             this.buttonAddStock = new System.Windows.Forms.Button();
             this.buttonSaveHarga_Jual = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.tBstoksisa = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.tBSize = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAdd)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -77,12 +79,13 @@ namespace SAD_OBSESSIVE
             // 
             // buttonAddImage
             // 
-            this.buttonAddImage.Location = new System.Drawing.Point(806, 328);
+            this.buttonAddImage.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddImage.Location = new System.Drawing.Point(798, 314);
             this.buttonAddImage.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAddImage.Name = "buttonAddImage";
-            this.buttonAddImage.Size = new System.Drawing.Size(114, 28);
+            this.buttonAddImage.Size = new System.Drawing.Size(133, 28);
             this.buttonAddImage.TabIndex = 1;
-            this.buttonAddImage.Text = "Change Image";
+            this.buttonAddImage.Text = "Change All Image";
             this.buttonAddImage.UseVisualStyleBackColor = true;
             this.buttonAddImage.Click += new System.EventHandler(this.buttonAddImage_Click_1);
             // 
@@ -139,7 +142,7 @@ namespace SAD_OBSESSIVE
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 69);
+            this.label6.Location = new System.Drawing.Point(12, 74);
             this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(82, 17);
@@ -149,7 +152,7 @@ namespace SAD_OBSESSIVE
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(39, 39);
+            this.label7.Location = new System.Drawing.Point(29, 10);
             this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(55, 17);
@@ -159,7 +162,7 @@ namespace SAD_OBSESSIVE
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(26, 98);
+            this.label8.Location = new System.Drawing.Point(26, 103);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(68, 17);
@@ -175,6 +178,7 @@ namespace SAD_OBSESSIVE
             this.cBoxVol.Size = new System.Drawing.Size(79, 24);
             this.cBoxVol.TabIndex = 17;
             this.cBoxVol.SelectedIndexChanged += new System.EventHandler(this.cBoxVol_SelectedIndexChanged);
+            this.cBoxVol.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cBoxVol_KeyPress);
             // 
             // cBoxKategori
             // 
@@ -197,10 +201,11 @@ namespace SAD_OBSESSIVE
             // 
             // tBStockAwal
             // 
-            this.tBStockAwal.Location = new System.Drawing.Point(106, 36);
+            this.tBStockAwal.Location = new System.Drawing.Point(106, 41);
             this.tBStockAwal.Name = "tBStockAwal";
             this.tBStockAwal.Size = new System.Drawing.Size(79, 22);
             this.tBStockAwal.TabIndex = 26;
+            this.tBStockAwal.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBStockAwal_KeyPress);
             // 
             // tBHargaJual
             // 
@@ -208,16 +213,21 @@ namespace SAD_OBSESSIVE
             this.tBHargaJual.Name = "tBHargaJual";
             this.tBHargaJual.Size = new System.Drawing.Size(125, 22);
             this.tBHargaJual.TabIndex = 27;
+            this.tBHargaJual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBHargaJual_KeyPress);
             // 
             // tBHargaBeli
             // 
-            this.tBHargaBeli.Location = new System.Drawing.Point(106, 69);
+            this.tBHargaBeli.Location = new System.Drawing.Point(106, 74);
             this.tBHargaBeli.Name = "tBHargaBeli";
             this.tBHargaBeli.Size = new System.Drawing.Size(125, 22);
             this.tBHargaBeli.TabIndex = 28;
+            this.tBHargaBeli.TextChanged += new System.EventHandler(this.tBHargaBeli_TextChanged);
+            this.tBHargaBeli.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBHargaBeli_KeyPress);
             // 
             // buttonFinish
             // 
+            this.buttonFinish.BackColor = System.Drawing.Color.Cyan;
+            this.buttonFinish.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonFinish.ForeColor = System.Drawing.SystemColors.ControlText;
             this.buttonFinish.Location = new System.Drawing.Point(878, 456);
             this.buttonFinish.Margin = new System.Windows.Forms.Padding(4);
@@ -225,12 +235,12 @@ namespace SAD_OBSESSIVE
             this.buttonFinish.Size = new System.Drawing.Size(98, 58);
             this.buttonFinish.TabIndex = 29;
             this.buttonFinish.Text = "Finish";
-            this.buttonFinish.UseVisualStyleBackColor = true;
+            this.buttonFinish.UseVisualStyleBackColor = false;
             this.buttonFinish.Click += new System.EventHandler(this.buttonAddProd_Click);
             // 
             // dateTimePickerProd
             // 
-            this.dateTimePickerProd.Location = new System.Drawing.Point(106, 98);
+            this.dateTimePickerProd.Location = new System.Drawing.Point(106, 103);
             this.dateTimePickerProd.Name = "dateTimePickerProd";
             this.dateTimePickerProd.Size = new System.Drawing.Size(200, 22);
             this.dateTimePickerProd.TabIndex = 31;
@@ -248,6 +258,7 @@ namespace SAD_OBSESSIVE
             // 
             // buttonChangeNama
             // 
+            this.buttonChangeNama.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonChangeNama.Location = new System.Drawing.Point(644, 114);
             this.buttonChangeNama.Name = "buttonChangeNama";
             this.buttonChangeNama.Size = new System.Drawing.Size(103, 23);
@@ -258,6 +269,7 @@ namespace SAD_OBSESSIVE
             // 
             // buttonChangeKat
             // 
+            this.buttonChangeKat.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonChangeKat.Location = new System.Drawing.Point(644, 152);
             this.buttonChangeKat.Name = "buttonChangeKat";
             this.buttonChangeKat.Size = new System.Drawing.Size(103, 23);
@@ -268,6 +280,7 @@ namespace SAD_OBSESSIVE
             // 
             // buttonChangeVol
             // 
+            this.buttonChangeVol.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonChangeVol.Location = new System.Drawing.Point(391, 192);
             this.buttonChangeVol.Name = "buttonChangeVol";
             this.buttonChangeVol.Size = new System.Drawing.Size(103, 23);
@@ -287,7 +300,8 @@ namespace SAD_OBSESSIVE
             // 
             // buttonAddStock
             // 
-            this.buttonAddStock.Location = new System.Drawing.Point(202, 134);
+            this.buttonAddStock.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonAddStock.Location = new System.Drawing.Point(202, 139);
             this.buttonAddStock.Name = "buttonAddStock";
             this.buttonAddStock.Size = new System.Drawing.Size(104, 23);
             this.buttonAddStock.TabIndex = 40;
@@ -297,6 +311,7 @@ namespace SAD_OBSESSIVE
             // 
             // buttonSaveHarga_Jual
             // 
+            this.buttonSaveHarga_Jual.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonSaveHarga_Jual.Location = new System.Drawing.Point(408, 275);
             this.buttonSaveHarga_Jual.Name = "buttonSaveHarga_Jual";
             this.buttonSaveHarga_Jual.Size = new System.Drawing.Size(75, 23);
@@ -308,6 +323,7 @@ namespace SAD_OBSESSIVE
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.panel1.Controls.Add(this.tBstoksisa);
             this.panel1.Controls.Add(this.label14);
             this.panel1.Controls.Add(this.label7);
             this.panel1.Controls.Add(this.tBStockAwal);
@@ -321,14 +337,22 @@ namespace SAD_OBSESSIVE
             this.panel1.Size = new System.Drawing.Size(323, 169);
             this.panel1.TabIndex = 46;
             // 
+            // tBstoksisa
+            // 
+            this.tBstoksisa.Enabled = false;
+            this.tBstoksisa.Location = new System.Drawing.Point(106, 10);
+            this.tBstoksisa.Name = "tBstoksisa";
+            this.tBstoksisa.Size = new System.Drawing.Size(79, 22);
+            this.tBstoksisa.TabIndex = 41;
+            // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(12, 13);
+            this.label14.Location = new System.Drawing.Point(14, 41);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(72, 17);
+            this.label14.Size = new System.Drawing.Size(80, 17);
             this.label14.TabIndex = 0;
-            this.label14.Text = "Add Stock";
+            this.label14.Text = "Add Stock :";
             // 
             // tBSize
             // 
@@ -338,21 +362,17 @@ namespace SAD_OBSESSIVE
             this.tBSize.Size = new System.Drawing.Size(79, 22);
             this.tBSize.TabIndex = 47;
             // 
-            // label9
+            // contextMenuStrip1
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(575, 366);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(46, 17);
-            this.label9.TabIndex = 48;
-            this.label9.Text = "label9";
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // FormInsertProduct
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1067, 554);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.tBSize);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tBHargaJual);
@@ -375,7 +395,10 @@ namespace SAD_OBSESSIVE
             this.Controls.Add(this.pictureBoxAdd);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormInsertProduct";
-            this.Text = "FormAddProduct";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Edit Product";
+            this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormInsertProduct_FormClosed);
             this.Load += new System.EventHandler(this.FormAddProduct_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAdd)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -415,6 +438,7 @@ namespace SAD_OBSESSIVE
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.TextBox tBSize;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox tBstoksisa;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
     }
 }

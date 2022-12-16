@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace SAD_OBSESSIVE
 {
@@ -37,15 +38,15 @@ namespace SAD_OBSESSIVE
 
         public FormInsertProduct()
         {
-            InitializeComponent();
             imgLocation = "";
+            InitializeComponent();
         }
 
         private void LoadInfo()
         {
             passedID = FormDisplay.passingId;
             dtInfo = new DataTable();
-            sqlQuery = $"select p.NAMA_PRODUK as Nama,k.NAMA_KATEGORI as Kategori,k.VOLUME as Vol, p.SIZE as Size, p.HARGA_JUAL as Jual,p.TOTAL_STOK as Tot from PRODUK p,KATEGORI k where p.ID_KATEGORI = k.ID_KATEGORI and p.ID_PRODUK = '{passedID}'; ; ";
+            sqlQuery = $"select p.NAMA_PRODUK as Nama,k.NAMA_KATEGORI as Kategori,k.VOLUME as Vol, p.SIZE as Size, p.HARGA_JUAL as Jual,p.TOTAL_STOK as Tot,p.HARGA_BELI as Beli from PRODUK p,KATEGORI k where p.ID_KATEGORI = k.ID_KATEGORI and p.ID_PRODUK = '{passedID}'; ; ";
             sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
             sqlAdapter = new MySqlDataAdapter(sqlCommand);
             sqlAdapter.Fill(dtInfo);
@@ -56,9 +57,12 @@ namespace SAD_OBSESSIVE
             tBSize.Text = dtInfo.Rows[0][3].ToString();
             tBHargaJual.Text = dtInfo.Rows[0][4].ToString();
             Stok = Convert.ToInt32(dtInfo.Rows[0][5].ToString());
+            tBstoksisa.Text = Stok.ToString();
 
             VolAwal = Convert.ToInt32(cBoxVol.Text);
             KatAwal = cBoxKategori.Text;
+            tBHargaBeli.Text = dtInfo.Rows[0][6].ToString();
+            tBHargaBeli.ForeColor = Color.Gray;
         }
         private void FormAddProduct_Load(object sender, EventArgs e)
         {
@@ -70,6 +74,7 @@ namespace SAD_OBSESSIVE
             Load_Filter_Vol();
             LoadGambar();
             cBoxVol.Text = dtInfo.Rows[0][2].ToString();
+            this.BackColor = ColorTranslator.FromHtml("#C38E6C");
         }
         private void Load_Filter_Kat()
         {
@@ -106,10 +111,19 @@ namespace SAD_OBSESSIVE
         
         private void buttonAddProd_Click(object sender, EventArgs e)
         {
+            LoadAwal();
             this.Close();
         }
+        public event EventHandler PerformForm1Click;
 
-       
+        private void LoadAwal()
+        {
+            EventHandler handler = this.PerformForm1Click;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+
 
         private void cBoxKategori_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -129,7 +143,7 @@ namespace SAD_OBSESSIVE
 
         private void cBoxVol_SelectedIndexChanged(object sender, EventArgs e)
         {
-            KatChange = true;
+            VolChange = true;
         }
 
         private void buttonAddVol_Click(object sender, EventArgs e)
@@ -147,6 +161,7 @@ namespace SAD_OBSESSIVE
             sqlConnect.Close();
 
             cBoxVol.Text = volu;
+            VolChange = true;
         }
 
         private void buttonAddImage_Click_1(object sender, EventArgs e)
@@ -164,7 +179,6 @@ namespace SAD_OBSESSIVE
                 FileStream stream = new FileStream(imgLocation, FileMode.Open, FileAccess.Read);
                 BinaryReader brs = new BinaryReader(stream);
                 images = brs.ReadBytes((int)stream.Length);
-                label9.Text = images.ToString();
 
                 try
                 {
@@ -174,6 +188,7 @@ namespace SAD_OBSESSIVE
                     sqlCommand.Parameters.Add(new MySqlParameter("@imagesup", images));
                     sqlCommand.ExecuteNonQuery();
                     sqlConnect.Close();
+                    LoadGambar();
                     MessageBox.Show("Gambar berhasil diupdate");
                 }
                 catch (Exception)
@@ -184,7 +199,6 @@ namespace SAD_OBSESSIVE
             LoadInfo();
             Load_Filter_Kat();
             Load_Filter_Vol();
-            LoadGambar();
         }
 
         private void cBoxKategori_TextChanged(object sender, EventArgs e)
@@ -259,7 +273,7 @@ namespace SAD_OBSESSIVE
                             }
                         }
 
-                        for (int i = 0; i < dtKat.Rows.Count; i++)
+                        for (int i = 0; i < dtVol.Rows.Count; i++)
                         {
                             if (cBoxVol.Text.ToUpper() == dtVol.Rows[i][0].ToString().ToUpper())
                             {
@@ -313,13 +327,28 @@ namespace SAD_OBSESSIVE
                     sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
                     string IDKat = sqlCommand.ExecuteScalar().ToString();
 
+                    for (int i = 0; i < dtVol.Rows.Count; i++)
+                    {
+                        if (cBoxVol.Text.ToUpper() == dtVol.Rows[i][0].ToString().ToUpper())
+                        {
+                            VolChange = false;
+                        }
+                    }
+
+                    if (VolChange == true)
+                    {
+                        sqlInsert = $"insert into KATEGORI values('{IDKat}', '{cBoxKategori.Text}',{cBoxVol.Text},0); ";
+                        sqlCommand = new MySqlCommand(sqlInsert, sqlConnect);
+                        sqlCommand.ExecuteNonQuery();
+                    }
+
 
                     sqlUpdate = $"update PRODUK set ID_KATEGORI = '{IDKat}' where substring(ID_PRODUK,1,7)= '{passedID.Substring(0, 7)}'; ";
                     sqlCommand = new MySqlCommand(sqlUpdate, sqlConnect);
                     sqlCommand.ExecuteNonQuery();
                     sqlConnect.Close();
 
-                    MessageBox.Show("Perubahan Kategori berhasil");
+                    MessageBox.Show("Perubahan Volume berhasil");
                 }
                 else
                 {
@@ -330,11 +359,19 @@ namespace SAD_OBSESSIVE
 
         private void buttonSaveHarga_Jual_Click(object sender, EventArgs e)
         {
-            sqlConnect.Open();
-            sqlUpdate = $"update PRODUK set HARGA_JUAL = '{tBHargaJual.Text}' where ID_PRODUK= '{passedID}'; ";
-            sqlCommand = new MySqlCommand(sqlUpdate, sqlConnect);
-            sqlCommand.ExecuteNonQuery();
-            sqlConnect.Close();
+            try
+            {
+
+                sqlConnect.Open();
+                sqlUpdate = $"update PRODUK set HARGA_JUAL = '{tBHargaJual.Text}' where ID_PRODUK= '{passedID}'; ";
+                sqlCommand = new MySqlCommand(sqlUpdate, sqlConnect);
+                sqlCommand.ExecuteNonQuery();
+                sqlConnect.Close();
+                MessageBox.Show("Harga berhasil diubah");
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void buttonAddStock_Click(object sender, EventArgs e)
@@ -346,25 +383,34 @@ namespace SAD_OBSESSIVE
             }
             else
             {
-                sqlQuery = $"select fHitungStokUpdate('{passedID}');";
-                sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
-                int StokTerpakai = Convert.ToInt32(sqlCommand.ExecuteScalar().ToString());
-                if ((Stok + Convert.ToInt32(tBStockAwal.Text))< StokTerpakai)
+                try
                 {
-                    MessageBox.Show("Input Stok tidak sesuai");
+                    sqlQuery = $"select fHitungStokUpdate('{passedID}');";
+                    sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
+                    int StokTerpakai = Convert.ToInt32(sqlCommand.ExecuteScalar().ToString());
+                    if ((Stok + Convert.ToInt32(tBStockAwal.Text)) < StokTerpakai)
+                    {
+                        MessageBox.Show("Input Stok tidak sesuai");
+                    }
+                    else
+                    {
+                        sqlInsert = $"insert into PENGELUARAN() values(null, null, null, '{passedID}', '{dtInfo.Rows[0][0].ToString()}', {tBStockAwal.Text}, {tBHargaBeli.Text}, null, '{dateTimePickerProd.Value.ToString("yyyy-MM-dd")}', 0); ";
+                        sqlCommand = new MySqlCommand(sqlInsert, sqlConnect);
+                        sqlCommand.ExecuteNonQuery();
+                        sqlUpdate = $"update PRODUK set TOTAL_STOK= {Stok + Convert.ToInt32(tBStockAwal.Text)}, STOK_SISA={Stok + Convert.ToInt32(tBStockAwal.Text) - StokTerpakai} where ID_PRODUK='{passedID}'; ";
+                        sqlCommand = new MySqlCommand(sqlUpdate, sqlConnect);
+                        sqlCommand.ExecuteNonQuery();
+                        MessageBox.Show("Stock berhasil diupdate");
+                        tBHargaBeli.Clear();
+                        tBStockAwal.Clear();
+                        dateTimePickerProd.Value = DateTime.Today;
+                        LoadInfo();
+                    }
                 }
-                else
+                catch (Exception)
                 {
-                    sqlInsert = $"insert into PENGELUARAN() values(null, null, null, '{passedID}', '{dtInfo.Rows[0][0].ToString()}', {tBStockAwal.Text}, {tBHargaBeli.Text}, null, '{dateTimePickerProd.Value.ToString("yyyy-MM-dd")}', 0); ";
-                    sqlCommand = new MySqlCommand(sqlInsert, sqlConnect);
-                    sqlCommand.ExecuteNonQuery();
-                    sqlUpdate = $"update PRODUK set TOTAL_STOK= {Stok + Convert.ToInt32(tBStockAwal.Text)}, STOK_SISA={Stok + Convert.ToInt32(tBStockAwal.Text) - StokTerpakai} where ID_PRODUK='{passedID}'; ";
-                    sqlCommand = new MySqlCommand(sqlUpdate, sqlConnect);
-                    sqlCommand.ExecuteNonQuery();
-                    MessageBox.Show("Stock berhasil diupdate");
-                    tBHargaBeli.Clear();
-                    tBStockAwal.Clear();
-                    dateTimePickerProd.Value = DateTime.Today;
+
+                    MessageBox.Show("Masukkan data dengan benar");
                 }
 
             }
@@ -392,6 +438,44 @@ namespace SAD_OBSESSIVE
             {
 
             }
+        }
+
+        private void cBoxVol_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tBHargaJual_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tBStockAwal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+        }
+
+        private void tBHargaBeli_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void FormInsertProduct_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            LoadAwal();
+        }
+
+        private void tBHargaBeli_TextChanged(object sender, EventArgs e)
+        {
+            tBHargaBeli.ForeColor = DefaultForeColor;
         }
     }
 }

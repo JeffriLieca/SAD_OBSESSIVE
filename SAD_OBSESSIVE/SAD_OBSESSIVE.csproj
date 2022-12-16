@@ -55,6 +55,54 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAddPengeluaranLain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddPengeluaranLain.Designer.cs">
+      <DependentUpon>FormAddPengeluaranLain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormEditPengeluaranLain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEditPengeluaranLain.Designer.cs">
+      <DependentUpon>FormEditPengeluaranLain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormEditMarketing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEditMarketing.Designer.cs">
+      <DependentUpon>FormEditMarketing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAddMarketing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAddMarketing.Designer.cs">
+      <DependentUpon>FormAddMarketing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHistory.Designer.cs">
+      <DependentUpon>FormHistory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHome.Designer.cs">
+      <DependentUpon>FormHome.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPengeluaranLain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPengeluaranLain.Designer.cs">
+      <DependentUpon>FormPengeluaranLain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormMarketing.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMarketing.Designer.cs">
+      <DependentUpon>FormMarketing.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormOrder.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,11 +127,50 @@
     <Compile Include="FormDisplay.Designer.cs">
       <DependentUpon>FormDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormProfitLoss.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormProfitLoss.Designer.cs">
+      <DependentUpon>FormProfitLoss.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoundedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Splash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddPengeluaranLain.resx">
+      <DependentUpon>FormAddPengeluaranLain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormEditPengeluaranLain.resx">
+      <DependentUpon>FormEditPengeluaranLain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormEditMarketing.resx">
+      <DependentUpon>FormEditMarketing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAddMarketing.resx">
+      <DependentUpon>FormAddMarketing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHistory.resx">
+      <DependentUpon>FormHistory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHome.resx">
+      <DependentUpon>FormHome.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPengeluaranLain.resx">
+      <DependentUpon>FormPengeluaranLain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMarketing.resx">
+      <DependentUpon>FormMarketing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormOrder.resx">
       <DependentUpon>FormOrder.cs</DependentUpon>
@@ -97,6 +184,9 @@
     <EmbeddedResource Include="FormDisplay.resx">
       <DependentUpon>FormDisplay.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormProfitLoss.resx">
+      <DependentUpon>FormProfitLoss.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -106,6 +196,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Splash.resx">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -118,6 +211,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Marketing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

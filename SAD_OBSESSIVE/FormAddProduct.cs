@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Threading;
 
 namespace SAD_OBSESSIVE
 {
@@ -23,14 +24,14 @@ namespace SAD_OBSESSIVE
         public string sqlQuery;
         public string sqlInsert;
         public List<string> listSize = new List<string>();
-        public bool KatChange = false;
-        public bool VolChange = false;
+        public bool KatChange = true;
+        public bool VolChange = true;
         public DataTable dtKat = new DataTable();
         public DataTable dtVol = new DataTable();
         public FormAddProduct()
         {
+
             InitializeComponent();
-            imgLocation = "";
         }
 
         private void FormAddProduct_Load(object sender, EventArgs e)
@@ -40,6 +41,7 @@ namespace SAD_OBSESSIVE
             buttonAddVol.Enabled = false;
             Load_Filter_Kat();
             Load_Filter_Vol();
+            this.BackColor = ColorTranslator.FromHtml("#C38E6C");
         }
         private void Load_Filter_Kat()
         {
@@ -76,6 +78,8 @@ namespace SAD_OBSESSIVE
         
         private void buttonAddProd_Click(object sender, EventArgs e)
         {
+            KatChange = true;
+            VolChange = true;
             if (tBNamaProd != null && cBoxKategori.Text != null && cBoxVol.Text != null && listSize.Count != 0 && tBStockAwal.Text != null && tBHargaJual.Text != null && tBHargaBeli.Text != null)
             {
                 try
@@ -119,7 +123,7 @@ namespace SAD_OBSESSIVE
                             KatChange = false;
                         }
                     }
-                    for (int i = 0; i < dtKat.Rows.Count; i++)
+                    for (int i = 0; i < dtVol.Rows.Count; i++)
                     {
                         if (cBoxVol.Text.ToUpper() == dtVol.Rows[i][0].ToString().ToUpper())
                         {
@@ -145,6 +149,9 @@ namespace SAD_OBSESSIVE
 
 
                     sqlConnect.Close();
+                    ClearData();
+                    LoadAwal();
+                    
                 }
                 catch (Exception)
                 {
@@ -157,6 +164,25 @@ namespace SAD_OBSESSIVE
             }
         }
 
+        private void ClearData()
+        {
+            tBNamaProd.Text = "";
+            cBoxKategori.SelectedIndex = 0;
+            cBoxVol.SelectedIndex = 0;
+            checkBox1.Checked = false;
+            checkBox2.Checked = false;
+            checkBox3.Checked = false;
+            checkBox4.Checked = false;
+            checkBox5.Checked = false;
+            checkBox6.Checked = false;
+            checkBox7.Checked = false;
+            tBStockAwal.Clear();
+            tBHargaJual.Clear();
+            tBHargaBeli.Clear();
+            dateTimePickerProd.Value = DateTime.Now;
+            pictureBoxAdd.Image = pictureBoxAdd.InitialImage;
+
+        }
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked == true)
@@ -315,7 +341,58 @@ namespace SAD_OBSESSIVE
 
         private void buttonCancelAdd_Click(object sender, EventArgs e)
         {
+            LoadAwal();
             this.Close();
+        }
+        public event EventHandler PerformForm1Click;
+
+        private void LoadAwal()
+        {
+            EventHandler handler = this.PerformForm1Click;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+        private void cBoxVol_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tBStockAwal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tBHargaJual_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void tBHargaBeli_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void FormAddProduct_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            LoadAwal();
+        }
+
+        private void pictureBoxAdd_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

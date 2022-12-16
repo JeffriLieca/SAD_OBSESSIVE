@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using SAD_OBSESSIVE.Db;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace SAD_OBSESSIVE
 {
@@ -18,6 +20,28 @@ namespace SAD_OBSESSIVE
 
     public partial class FormDisplay : Form
     {
+        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn
+            (
+            int nLeft,
+            int nTop,
+            int nRight,
+            int nBotto,
+            int nWidthEllipse,
+            int nHeightEllipse);
+        private void BuatButton()
+        {
+            buttonHome.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonOrder.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonInventory.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonExpenses.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonMarketing.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonProfitLoss.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            buttonChart.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, buttonHome.Width, buttonHome.Height, 30, 30));
+            panel7.BackColor = ColorTranslator.FromHtml("#6B3D20");
+            panel8.BackColor = ColorTranslator.FromHtml("#6B3D20");
+            this.BackColor = ColorTranslator.FromHtml("#C38E6C");
+        }
         public static string sqlConnection = "server=139.255.11.84;uid=student;pwd=isbmantap;database=SAD_Obsessive";
         public MySqlConnection sqlConnect = new MySqlConnection(sqlConnection);
         public MySqlCommand sqlCommand;
@@ -31,23 +55,8 @@ namespace SAD_OBSESSIVE
         public FormDisplay()
         {
             InitializeComponent();
-            cBoxVol.Enabled = false;
-            LoadProduct();
-            LoadGambar();
-            Load_Filter_Kat();
-            Load_Filter_Vol();
-
         }
 
-        private void buttonLoad_Click(object sender, EventArgs e)
-        {
-
-            cBoxVol.Enabled = false;
-            LoadProduct();
-            LoadGambar();
-            Load_Filter_Kat();
-            Load_Filter_Vol();
-        }
         private void LoadProduct()
         {
             sqlConnect.Open();
@@ -63,55 +72,78 @@ namespace SAD_OBSESSIVE
             sqlAdapter = new MySqlDataAdapter(sqlCommand);
             sqlAdapter.Fill(dtProduct);
             dgvInvent.DataSource = dtProduct;
-            dgvInvent.Columns.Remove("ID");
-            dgvInvent.Columns[2].Width = 40;
-            dgvInvent.Columns[3].Width = 40;
-            dgvInvent.Columns[4].Width = 40;
             sqlConnect.Close();
-            sqlCommand.CommandType = CommandType.Text;
+            dgvInvent.Columns["Kategori"].Width = 200;
+            dgvInvent.Columns["Nama"].Width = 180;
+            dgvInvent.Columns["Size"].Width = 50;
+            dgvInvent.Columns["Size"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvInvent.Columns["Vol"].Width = 50;
+            dgvInvent.Columns["Stock"].Width = 50;
+            dgvInvent.Columns["Vol"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dgvInvent.Columns["Stock"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
+            sqlCommand.CommandType = CommandType.Text;
+            
 
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            DialogResult drDelete = MessageBox.Show("Confirm to delete?", "Delete", MessageBoxButtons.YesNo);
-            if (drDelete == DialogResult.Yes)
+            if (passingId != "")
             {
-                sqlConnect.Open();
-                sqlQuery = "update PRODUK set STATUS_DELETE_PENGELUARAN_LAIN = '1' where ID_PRODUK = '" + dtProduct.Rows[index][0] + "' ";
-                sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
-                sqlCommand.ExecuteNonQuery();
-                sqlConnect.Close();
+                DialogResult drDelete = MessageBox.Show("Confirm to delete?", "Delete", MessageBoxButtons.YesNo);
+                if (drDelete == DialogResult.Yes)
+                {
+                    sqlConnect.Open();
+                    sqlQuery = "update PRODUK set STATUS_DELETE_PENGELUARAN_LAIN = '1' where ID_PRODUK = '" + dtProduct.Rows[index][0] + "' ";
+                    sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
+                    sqlCommand.ExecuteNonQuery();
+                    sqlConnect.Close();
+                    passingId = "";
+                    MessageBox.Show("Data berhasil di delete");
+                    LoadProduct();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Pilih data yang mau didelete");
             }
         }
 
         private void buttonEdit_Click(object sender, EventArgs e)
         {
-            FormInsertProduct formInsertProduct = new FormInsertProduct();
-            formInsertProduct.Show();
+            if (passingId != "")
+            {
+
+                FormInsertProduct formInsertProduct = new FormInsertProduct();
+                formInsertProduct.PerformForm1Click += new EventHandler(frm2_PerformForm1Click);
+                formInsertProduct.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Pilih data yang mau diedit");
+            }
         }
-        public void LoadGambar()
+
+        private void FormInsertProduct_PerformForm1Click(object sender, EventArgs e)
         {
-            string imgLocation = "";
-            sqlConnect.Open();
-            sqlQuery = "select GAMBAR from PRODUK where ID_PRODUK='" + dtProduct.Rows[index][0] + "';";
-            sqlCommand = new MySqlCommand(sqlQuery, sqlConnect);
-            sqlAdapter = new MySqlDataAdapter(sqlCommand);
-            DataTable dtCoba = new DataTable();
-            sqlAdapter.Fill(dtCoba);
-            //byte[] images = ((byte[])dtCoba.Rows[0][0]);
-            //MemoryStream mstream = new MemoryStream(images);
-            //pictureBoxProd.Image = Image.FromStream(mstream);
-            sqlConnect.Close();
+            throw new NotImplementedException();
         }
+
 
         private void dgvInvent_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            index = e.RowIndex;
-            DataGridViewRow selectedRow = dgvInvent.Rows[index];
-            passingId = dtProduct.Rows[index][0].ToString();
-            label7.Text = passingId.ToString();
+            
+            try
+            {
+                index = e.RowIndex;
+                DataGridViewRow selectedRow = dgvInvent.Rows[index];
+                passingId = dtProduct.Rows[index][0].ToString();
+                
+            }
+            catch (Exception)
+            {
+            }
 
         }
 
@@ -188,17 +220,93 @@ namespace SAD_OBSESSIVE
 
         private void FormDisplay_Load(object sender, EventArgs e)
         {
+            BuatButton();
             cBoxVol.Enabled = false;
             LoadProduct();
-            LoadGambar();
             Load_Filter_Kat();
             Load_Filter_Vol();
+            passingId = "";
+            buttonInventory.Enabled = false;
+            
         }
 
+
+        private void frm2_PerformForm1Click(object sender, EventArgs e)
+        {
+            LoadProduct();
+            passingId = "";
+            
+        }
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             FormAddProduct formAddProduct = new FormAddProduct();
-            formAddProduct.Show();
+            formAddProduct.PerformForm1Click += new EventHandler(frm2_PerformForm1Click);
+            formAddProduct.ShowDialog();
+        }
+
+        private void tBStok_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+        }
+        
+
+        private void buttonHome_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormHome formHome = new FormHome();
+            formHome.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonOrder_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormOrder formOrder = new FormOrder();
+            formOrder.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonInventory_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormDisplay formDisplay = new FormDisplay();
+            formDisplay.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonExpenses_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormPengeluaranLain formPengeluaranLain = new FormPengeluaranLain();
+            formPengeluaranLain.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonMarketing_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormMarketing formMarketing = new FormMarketing();
+            formMarketing.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonProfitLoss_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            FormProfitLoss formProfitLoss = new FormProfitLoss();
+            formProfitLoss.ShowDialog();
+            this.Close();
+        }
+
+        private void buttonChart_Click_1(object sender, EventArgs e)
+        {
+            this.Hide();
+            Form1 formChart = new Form1();
+            formChart.ShowDialog();
+            this.Close();
         }
     }
 }

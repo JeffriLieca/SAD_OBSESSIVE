@@ -64,6 +64,7 @@ namespace SAD_OBSESSIVE
             // 
             this.pictureBoxAdd.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.pictureBoxAdd.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxAdd.Image")));
+            this.pictureBoxAdd.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBoxAdd.InitialImage")));
             this.pictureBoxAdd.Location = new System.Drawing.Point(754, 67);
             this.pictureBoxAdd.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxAdd.Name = "pictureBoxAdd";
@@ -71,9 +72,11 @@ namespace SAD_OBSESSIVE
             this.pictureBoxAdd.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxAdd.TabIndex = 0;
             this.pictureBoxAdd.TabStop = false;
+            this.pictureBoxAdd.Click += new System.EventHandler(this.pictureBoxAdd_Click);
             // 
             // buttonAddImage
             // 
+            this.buttonAddImage.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonAddImage.Location = new System.Drawing.Point(815, 328);
             this.buttonAddImage.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAddImage.Name = "buttonAddImage";
@@ -172,6 +175,7 @@ namespace SAD_OBSESSIVE
             this.cBoxVol.Size = new System.Drawing.Size(79, 24);
             this.cBoxVol.TabIndex = 17;
             this.cBoxVol.SelectedIndexChanged += new System.EventHandler(this.cBoxVol_SelectedIndexChanged);
+            this.cBoxVol.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cBoxVol_KeyPress);
             // 
             // cBoxKategori
             // 
@@ -275,6 +279,7 @@ namespace SAD_OBSESSIVE
             this.tBStockAwal.Name = "tBStockAwal";
             this.tBStockAwal.Size = new System.Drawing.Size(79, 22);
             this.tBStockAwal.TabIndex = 26;
+            this.tBStockAwal.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBStockAwal_KeyPress);
             // 
             // tBHargaJual
             // 
@@ -282,6 +287,7 @@ namespace SAD_OBSESSIVE
             this.tBHargaJual.Name = "tBHargaJual";
             this.tBHargaJual.Size = new System.Drawing.Size(125, 22);
             this.tBHargaJual.TabIndex = 27;
+            this.tBHargaJual.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBHargaJual_KeyPress);
             // 
             // tBHargaBeli
             // 
@@ -289,27 +295,32 @@ namespace SAD_OBSESSIVE
             this.tBHargaBeli.Name = "tBHargaBeli";
             this.tBHargaBeli.Size = new System.Drawing.Size(125, 22);
             this.tBHargaBeli.TabIndex = 28;
+            this.tBHargaBeli.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tBHargaBeli_KeyPress);
             // 
             // buttonAddProd
             // 
+            this.buttonAddProd.BackColor = System.Drawing.Color.Lime;
+            this.buttonAddProd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonAddProd.Location = new System.Drawing.Point(878, 456);
             this.buttonAddProd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonAddProd.Name = "buttonAddProd";
             this.buttonAddProd.Size = new System.Drawing.Size(98, 58);
             this.buttonAddProd.TabIndex = 29;
             this.buttonAddProd.Text = "Add Product";
-            this.buttonAddProd.UseVisualStyleBackColor = true;
+            this.buttonAddProd.UseVisualStyleBackColor = false;
             this.buttonAddProd.Click += new System.EventHandler(this.buttonAddProd_Click);
             // 
             // buttonCancelAdd
             // 
+            this.buttonCancelAdd.BackColor = System.Drawing.Color.Red;
+            this.buttonCancelAdd.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonCancelAdd.Location = new System.Drawing.Point(754, 456);
             this.buttonCancelAdd.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancelAdd.Name = "buttonCancelAdd";
             this.buttonCancelAdd.Size = new System.Drawing.Size(98, 58);
             this.buttonCancelAdd.TabIndex = 30;
             this.buttonCancelAdd.Text = "Cancel";
-            this.buttonCancelAdd.UseVisualStyleBackColor = true;
+            this.buttonCancelAdd.UseVisualStyleBackColor = false;
             this.buttonCancelAdd.Click += new System.EventHandler(this.buttonCancelAdd_Click);
             // 
             // dateTimePickerProd
@@ -364,7 +375,10 @@ namespace SAD_OBSESSIVE
             this.Controls.Add(this.pictureBoxAdd);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormAddProduct";
-            this.Text = "FormAddProduct";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Add Product";
+            this.TopMost = true;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormAddProduct_FormClosed);
             this.Load += new System.EventHandler(this.FormAddProduct_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAdd)).EndInit();
             this.ResumeLayout(false);
